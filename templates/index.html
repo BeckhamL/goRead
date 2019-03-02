@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Document</title>
+    <link rel="stylesheet" href="styles/styles.css">
+</head>
+<body>
+
+    <div style="text-align: center">
+        <h1>Make following the news easier</h1>
+        <p>If you're like me, you have trouble reading pages of text for a long time. This takes the top posts on Medium and provides 
+        a summary in 10 or fewer sentences.</p>
+    </div>
+
+    {{ range .}}
+    <p>Title: {{.Title}}</p>
+    <p>Author: {{.Author}}</p>
+    <p>Description: {{.Desc }}</p>
+    <a href="{{.URL}}" target="_blank">Link to the article</a>
+    <img src="{{.URLImage}}" height="250" width="250"></img>
+    {{end}}
+
+</body>
+</html>
