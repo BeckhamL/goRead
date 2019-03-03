@@ -1,3 +1,21 @@
-body {
-    background: #1af;
+#intro {
+    font-family: 'Roboto Slab';
+    text-align: center;
+}
+
+#topHeadline {
+    border: 1px solid gray;
+    margin-top: 15px;
+    padding: 20px;
+    overflow: hidden;
+}
+
+#topHeadline h2 {
+    font-size: 24px;
+    color: black;
+}
+
+#topHeadline img {
+    margin-right: 15px;
+    float: left;
 }
