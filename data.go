@@ -45,32 +45,33 @@ func topHeadlines() []Article {
 	return articles
 }
 
-// func sports() []Article {
+func sports() []Article {
 
-// 	c := newsapi.NewClient("42b47add38084c6c99964fe24dcf6740", newsapi.WithHTTPClient(http.DefaultClient))
-// 	sources, err := c.GetTopHeadlines(context.Background(), &newsapi.TopHeadlineParameters{
-// 		category: []string{"sports"},
-// 	})
+	c := newsapi.NewClient("42b47add38084c6c99964fe24dcf6740", newsapi.WithHTTPClient(http.DefaultClient))
+	sources, err := c.GetTopHeadlines(context.Background(), &newsapi.TopHeadlineParameters{
+		Category: "sports",
+		Country:  "us",
+	})
 
-// 	if err != nil {
-// 		panic(err)
-// 	}
+	if err != nil {
+		panic(err)
+	}
 
-// 	var articles = []Article{}
+	var articles = []Article{}
 
-// 	for _, s := range sources.Articles {
+	for _, s := range sources.Articles {
 
-// 		a := Article{
-// 			Title:    s.Title,
-// 			Author:   s.Author,
-// 			Desc:     s.Content,
-// 			URL:      s.URL,
-// 			URLImage: s.URLToImage,
-// 		}
+		a := Article{
+			Title:    s.Title,
+			Author:   s.Author,
+			Desc:     s.Content,
+			URL:      s.URL,
+			URLImage: s.URLToImage,
+		}
 
-// 		articles = append(articles, a)
+		articles = append(articles, a)
 
-// 	}
+	}
 
-// 	return articles
-// }
+	return articles
+}
