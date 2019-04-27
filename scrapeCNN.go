@@ -10,8 +10,13 @@ import (
 	"github.com/gocolly/colly"
 )
 
-// better algorithm, get the title, break the paragraph into sentences, if the sentence contains a word in the title, add it
-func main() {
+type keyValue struct {
+	Key   string
+	Value int
+}
+
+// Function that visits website and summarizes the text
+func getSummary() {
 
 	c := colly.NewCollector()
 
@@ -30,7 +35,13 @@ func main() {
 		}
 
 		if paragraph != "" {
-			parseString(paragraph)
+			parsedString := parseString(paragraph)
+			m := make(map[string]int)
+			var elements []keyValue
+			m = WordCount(parsedString)
+			elements = sortMap(m)
+
+			fmt.Println(elements)
 		}
 
 	})
@@ -39,10 +50,12 @@ func main() {
 		fmt.Println("Visiting", r.URL.String())
 	})
 
-	c.Visit("https://www.cnn.com/2019/03/03/us/tornadoes-alabama-georgia-wxc/index.html")
+	c.Visit("https://www.cnn.com/2019/04/26/us/california-sunnyvale-crash-suspect/index.html")
+
 }
 
-func parseString(text string) {
+// Function to remove all unecessary punctuation and character
+func parseString(text string) string {
 
 	reg, err := regexp.Compile("[^a-zA-Z0-9'.]+")
 	if err != nil {
@@ -51,11 +64,11 @@ func parseString(text string) {
 
 	newString := reg.ReplaceAllString(text, " ")
 
-	WordCount(newString)
+	return newString
 }
 
 // Function to find words
-func WordCount(s string) {
+func WordCount(s string) map[string]int {
 
 	words := strings.Fields(s)
 	m := make(map[string]int)
@@ -63,47 +76,38 @@ func WordCount(s string) {
 		m[word]++
 	}
 
-	sortMap(m)
+	return m
 }
 
-func sortMap(myMap map[string]int) map[string]int {
+// Takes a map and returns a slice of keyValue sorted by highest frequency
+func sortMap(myMap map[string]int) []keyValue {
 
 	fillerWords := []string{"the", "to", "of", "a", "in", "and", "were", "they", "that", "have",
-		"for", "been", "said", "but", "by", "is", "at", "how", "why", "many", "in", "on", "go", "of"}
+		"for", "been", "said", "but", "by", "is", "at", "how", "why", "many", "in", "on", "go", "of", "he", "was", "this", "or",
+		"as", "if", "his", "also"}
 
-	type kv struct {
-		Key   string
-		Value int
-	}
-
-	var ss []kv
+	var ss []keyValue
 
 	for k, v := range myMap {
-		ss = append(ss, kv{k, v})
+		ss = append(ss, keyValue{k, v})
 	}
 
+	// Sorting words by frequency
 	sort.Slice(ss, func(i, j int) bool {
 		return ss[i].Value > ss[j].Value
 	})
 
-	newMap := make(map[string]int)
-
-	for _, kv := range ss {
-
-		if stringInSlice(kv.Key, fillerWords) {
-			delete(myMap, kv.Key)
+	for i := 0; i < len(ss); i++ {
+		if stringInSlice(ss[i].Key, fillerWords) {
+			ss = append(ss[:i], ss[i+1:]...)
+			i--
 		}
-
-		newMap[kv.Key] = kv.Value
 	}
 
-	for k, v := range newMap {
-		fmt.Println(k, v)
-	}
-
-	return myMap
+	return ss
 }
 
+// Checks if string is contained in array
 func stringInSlice(a string, list []string) bool {
 	for _, b := range list {
 		if b == a {

@@ -5,6 +5,8 @@ import (
 	"html/template"
 	"log"
 	"net/http"
+
+	"github.com/gorilla/mux"
 )
 
 var t = template.Must(template.ParseFiles("templates/index.html"))
@@ -24,12 +26,12 @@ func index(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-// func main() {
+func main() {
 
-// 	server := mux.NewRouter()
-// 	server.HandleFunc("/", runServ)
-// 	server.HandleFunc("/index", index)
+	server := mux.NewRouter()
+	server.HandleFunc("/", runServ)
+	server.HandleFunc("/index", index)
 
-// 	server.PathPrefix("/styles/").Handler(http.StripPrefix("/styles/", http.FileServer(http.Dir("templates/styles/"))))
-// 	http.ListenAndServe(":8001", server)
-// }
+	server.PathPrefix("/styles/").Handler(http.StripPrefix("/styles/", http.FileServer(http.Dir("templates/styles/"))))
+	http.ListenAndServe(":8001", server)
+}
