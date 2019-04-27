@@ -51,7 +51,7 @@ func sortMapTIME(myMap map[string]int) []keyValue {
 	})
 
 	for i := 0; i < len(ss); i++ {
-		if stringInSliceCNN(ss[i].Key, fillerWords) {
+		if stringInSliceTIME(ss[i].Key, fillerWords) {
 			ss = append(ss[:i], ss[i+1:]...)
 			i--
 		}

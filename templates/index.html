@@ -16,13 +16,17 @@
 
     <h1>Top Headlines</h1>
     {{ range .}}
+    <a href="{{.URL}}" target="_blank" style="text-decoration:none">
     <div id="topHeadline">
-        <img src="{{.URLImage}}" height="200" width="200"></img>
+        <img src="{{.URLImage}}" height="250" width="250"></img>
         <h2 id="title">{{.Title}}</h2>
-        <p id="author">{{.Author}}</p>
-        <p>{{.Desc }}</p>
-        <a href="{{.URL}}" target="_blank">Link to the article</a>
+        <p id="author">Author: {{.Author}}</p>
+        <p id="source"> Source: {{.Website}}</p>
+        <p id="datePublished">Date published: {{.Date}}</p>
+        <p>{{.Desc}}</p>
+        
     </div>
+    </a>
     {{end}}
 
 </body>

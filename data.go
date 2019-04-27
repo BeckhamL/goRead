@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"net/http"
+	"time"
 
 	"github.com/barthr/newsapi"
 )
@@ -13,6 +14,8 @@ type Article struct {
 	Desc     string
 	URL      string
 	URLImage string
+	Website  string
+	Date     time.Time
 }
 
 func topHeadlines() []Article {
@@ -36,6 +39,8 @@ func topHeadlines() []Article {
 			Desc:     s.Content,
 			URL:      s.URL,
 			URLImage: s.URLToImage,
+			Website:  s.Source.Name,
+			Date:     s.PublishedAt,
 		}
 
 		articles = append(articles, a)
