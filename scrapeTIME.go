@@ -1,61 +1,14 @@
 package main
 
 import (
-	"fmt"
 	"log"
 	"regexp"
 	"sort"
 	"strings"
-
-	"github.com/gocolly/colly"
 )
 
-type keyValue struct {
-	Key   string
-	Value int
-}
-
-// Function that visits website and summarizes the text
-func getSummaryCNN() {
-
-	c := colly.NewCollector()
-
-	c.OnHTML(".l-container", func(e *colly.HTMLElement) {
-
-		paragraph := e.ChildText(".zn-body__paragraph")
-		title := e.ChildText(".pg-headline")
-
-		if title != "" {
-
-			counter := len(strings.Fields(title))
-			titleWords := make([]string, counter)
-			for i, words := range strings.Fields(title) {
-				titleWords[i] = words
-			}
-		}
-
-		if paragraph != "" {
-			parsedString := parseStringCNN(paragraph)
-			m := make(map[string]int)
-			var elements []keyValue
-			m = WordCountCNN(parsedString)
-			elements = sortMapCNN(m)
-
-			fmt.Println(elements)
-		}
-
-	})
-
-	c.OnRequest(func(r *colly.Request) {
-		fmt.Println("Visiting", r.URL.String())
-	})
-
-	c.Visit("https://www.cnn.com/2019/04/26/us/california-sunnyvale-crash-suspect/index.html")
-
-}
-
 // Function to remove all unecessary punctuation and character
-func parseStringCNN(text string) string {
+func parseStringTIME(text string) string {
 
 	reg, err := regexp.Compile("[^a-zA-Z0-9'.]+")
 	if err != nil {
@@ -68,7 +21,7 @@ func parseStringCNN(text string) string {
 }
 
 // Function to find words
-func WordCountCNN(s string) map[string]int {
+func WordCountTIME(s string) map[string]int {
 
 	words := strings.Fields(s)
 	m := make(map[string]int)
@@ -80,7 +33,7 @@ func WordCountCNN(s string) map[string]int {
 }
 
 // Takes a map and returns a slice of keyValue sorted by highest frequency
-func sortMapCNN(myMap map[string]int) []keyValue {
+func sortMapTIME(myMap map[string]int) []keyValue {
 
 	fillerWords := []string{"the", "to", "of", "a", "in", "and", "were", "they", "that", "have",
 		"for", "been", "said", "but", "by", "is", "at", "how", "why", "many", "in", "on", "go", "of", "he", "was", "this", "or",
@@ -108,7 +61,7 @@ func sortMapCNN(myMap map[string]int) []keyValue {
 }
 
 // Checks if string is contained in array
-func stringInSliceCNN(a string, list []string) bool {
+func stringInSliceTIME(a string, list []string) bool {
 	for _, b := range list {
 		if b == a {
 			return true
