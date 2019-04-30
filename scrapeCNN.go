@@ -16,9 +16,12 @@ type keyValue struct {
 }
 
 // Function that visits website and summarizes the text
-func getSummaryCNN() {
+func getSummary(url string) [10]string {
 
 	c := colly.NewCollector()
+
+	var titleWords []string
+	var paragraphWords [10]string
 
 	c.OnHTML(".l-container", func(e *colly.HTMLElement) {
 
@@ -28,9 +31,9 @@ func getSummaryCNN() {
 		if title != "" {
 
 			counter := len(strings.Fields(title))
-			titleWords := make([]string, counter)
+			titleWords = make([]string, counter)
 			for i, words := range strings.Fields(title) {
-				titleWords[i] = words
+				titleWords[i] = parseStringCNN(words)
 			}
 		}
 
@@ -41,7 +44,9 @@ func getSummaryCNN() {
 			m = WordCountCNN(parsedString)
 			elements = sortMapCNN(m)
 
-			fmt.Println(elements)
+			for i := 0; i < 10; i++ {
+				paragraphWords[i] = elements[i].Key
+			}
 		}
 
 	})
@@ -50,8 +55,9 @@ func getSummaryCNN() {
 		fmt.Println("Visiting", r.URL.String())
 	})
 
-	c.Visit("https://www.cnn.com/2019/04/26/us/california-sunnyvale-crash-suspect/index.html")
+	c.Visit(url)
 
+	return paragraphWords
 }
 
 // Function to remove all unecessary punctuation and character
@@ -84,7 +90,7 @@ func sortMapCNN(myMap map[string]int) []keyValue {
 
 	fillerWords := []string{"the", "to", "of", "a", "in", "and", "were", "they", "that", "have",
 		"for", "been", "said", "but", "by", "is", "at", "how", "why", "many", "in", "on", "go", "of", "he", "was", "this", "or",
-		"as", "if", "his", "also"}
+		"as", "if", "his", "also", "not", "it", "He", "She", "an", "able", "with", "I", "The"}
 
 	var ss []keyValue
 

@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-    <title>Document</title>
+    <title>goRead</title>
     <link rel="stylesheet" type="text/css" href="styles/style.css">
     <link href="https://fonts.googleapis.com/css?family=Roboto+Slab" rel="stylesheet">
 </head>
@@ -14,6 +14,10 @@
         <p>Top headlining news articles summarized in real time</p>
     </div>
 
+    <div id="hello">
+        <hello></hello>
+    </div>
+
     <h1>Top Headlines</h1>
     {{ range .}}
     <a href="{{.URL}}" target="_blank" style="text-decoration:none">
@@ -23,12 +27,11 @@
         <p id="author">Author: {{.Author}}</p>
         <p id="source"> Source: {{.Website}}</p>
         <p id="datePublished">Date published: {{.Date}}</p>
-        <p>{{.Desc}}</p>
+        <p>Top Keywords: {{.Keywords}}</p>
         
     </div>
     </a>
     {{end}}
 
 </body>
-
 </html>
