@@ -1,3 +1,9 @@
+html, body {
+    margin: 0; 
+    padding: 0;
+    background-color: #fafafa;
+}
+
 #intro {
     font-family: 'Roboto Slab';
     text-align: center;
@@ -6,11 +12,23 @@
 #topHeadline {
     border: 1px solid gray;
     margin-top: 15px;
-    margin-left: 250px;
-    margin-right: 250px;
+    margin-bottom: 20px;
+    margin-left: 220px;
+    margin-right: 220px;
     overflow: hidden;
     padding-top: 20px;
+    background-color: white;
     padding-bottom: 90px;
+    border-radius: 12px;
+    font-family: 'Roboto Slab';
+}
+
+#summarizedText {
+    text-align: justify;
+    width: 220px;
+    margin-left: 20px;
+    padding-top: 45px;
+    position: absolute;
 }
 
 #topHeadline h2 {
@@ -26,6 +44,27 @@
 
 #topHeadline:hover {
     box-shadow: 0 0 11px rgba(33,33,33,.2);
+}
+
+#textBox {
+
+}
+
+header {
+    background-color: #69D7E4;
+    padding-top: 10px;
+    padding-left: 10px;
+    padding-bottom: 1px;
+    font-size: 35px;
+    font-family: 'Roboto Slab';
+    color: white;
+}
+
+footer {
+    background-color: #69D7E4;
+    padding: 10px;
+    text-align: center;
+    color: white;
 }
 
 p {

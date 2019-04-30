@@ -5,33 +5,46 @@
     <title>goRead</title>
     <link rel="stylesheet" type="text/css" href="styles/style.css">
     <link href="https://fonts.googleapis.com/css?family=Roboto+Slab" rel="stylesheet">
+    <link rel="icon" href="templates/images/book.png">
 </head>
 
 <body>
 
+    <header>
+        <h2>goRead</h2>
+    </header>
+              
+
     <div id="intro">
         <h1><b>Make following the news easier</b></h1>
-        <p>Top headlining news articles summarized in real time</p>
+        <p>Top headlining news articles from major outlets readily summarized</p>
     </div>
 
     <div id="hello">
         <hello></hello>
     </div>
 
-    <h1>Top Headlines</h1>
-    {{ range .}}
-    <a href="{{.URL}}" target="_blank" style="text-decoration:none">
-    <div id="topHeadline">
-        <img src="{{.URLImage}}" height="250" width="250"></img>
-        <h2 id="title">{{.Title}}</h2>
-        <p id="author">Author: {{.Author}}</p>
-        <p id="source"> Source: {{.Website}}</p>
-        <p id="datePublished">Date published: {{.Date}}</p>
-        <p>Top Keywords: {{.Keywords}}</p>
-        
+    <div>
+        {{ range .}}
+        <a href="{{.URL}}" target="_blank" style="text-decoration:none">
+        <div id="topHeadline">
+            <img src="{{.URLImage}}" height="250" width="250"></img>
+            <div id="textBox">
+                <h2 id="title">{{.Title}}</h2>
+                <p id="author">Author: {{.Author}}</p>
+                <p id="source"> Source: {{.Website}}</p>
+                <p id="datePublished">Date published: {{.Date}}</p>
+                <p>Top Keywords: {{.Keywords}}</p>
+            </div>
+            <p id="summarizedText">This is a test</p>
+        </div>
+        </a>
+        {{end}}
     </div>
-    </a>
-    {{end}}
 
+    <footer>
+        <p>Made with &hearts; from Toronto</p>
+    </footer>
+          
 </body>
 </html>

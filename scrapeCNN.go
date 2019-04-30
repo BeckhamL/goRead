@@ -16,7 +16,7 @@ type keyValue struct {
 }
 
 // Function that visits website and summarizes the text
-func getSummary(url string) [10]string {
+func getMostFrequentWordsCNN(url string) [10]string {
 
 	c := colly.NewCollector()
 
@@ -47,15 +47,17 @@ func getSummary(url string) [10]string {
 			for i := 0; i < 10; i++ {
 				paragraphWords[i] = elements[i].Key
 			}
+
+			getSummaryCNN(parsedString, paragraphWords, titleWords)
 		}
 
 	})
 
-	c.OnRequest(func(r *colly.Request) {
-		fmt.Println("Visiting", r.URL.String())
-	})
+	// c.OnRequest(func(r *colly.Request) {
+	// 	fmt.Println("Visiting", r.URL.String())
+	// })
 
-	c.Visit(url)
+	c.Visit("https://www.cnn.com/2019/04/29/health/measles-cdc-704-bn/index.html")
 
 	return paragraphWords
 }
@@ -90,7 +92,8 @@ func sortMapCNN(myMap map[string]int) []keyValue {
 
 	fillerWords := []string{"the", "to", "of", "a", "in", "and", "were", "they", "that", "have",
 		"for", "been", "said", "but", "by", "is", "at", "how", "why", "many", "in", "on", "go", "of", "he", "was", "this", "or",
-		"as", "if", "his", "also", "not", "it", "He", "She", "an", "able", "with", "I", "The"}
+		"as", "if", "his", "also", "not", "it", "He", "She", "an", "able", "with", "I", "The", "will", "him", "be", "who", "has",
+		"We", "are", "like", "than"}
 
 	var ss []keyValue
 
@@ -121,4 +124,38 @@ func stringInSliceCNN(a string, list []string) bool {
 		}
 	}
 	return false
+}
+
+func intersectCNN(arr1 []string, arr2 []string) bool {
+
+	for i := 0; i < len(arr1); i++ {
+		for j := 0; j < len(arr2); j++ {
+			if arr1[i] == arr2[j] {
+				return true
+			}
+		}
+	}
+	return false
+}
+
+func getSummaryCNN(paragraph string, frequentWords [10]string, titleText []string) string {
+
+	var response string
+	var sentences []string
+	var words []string
+	sentences = strings.Split(paragraph, ".")
+
+	for i := 0; i < len(sentences); i++ {
+		words = strings.Split(sentences[i], " ")
+		for j := 0; j < len(words); j++ {
+			if stringInSliceCNN(words[j], titleText) {
+				//response = response + "." + sentences[i]
+				fmt.Println(words[j])
+				fmt.Println(sentences[i])
+			}
+		}
+	}
+	fmt.Println(response)
+
+	return response
 }

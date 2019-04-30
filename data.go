@@ -36,7 +36,7 @@ func topHeadlines() []Article {
 		a := Article{
 			Title:    s.Title,
 			Author:   s.Author,
-			Keywords: getSummary(s.URL),
+			Keywords: getMostFrequentWordsCNN(s.URL),
 			URL:      s.URL,
 			URLImage: s.URLToImage,
 			Website:  s.Source.Name,
