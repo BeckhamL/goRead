@@ -38,7 +38,7 @@ func sortMapTIME(myMap map[string]int) []keyValue {
 	fillerWords := []string{"the", "to", "of", "a", "in", "and", "were", "they", "that", "have",
 		"for", "been", "said", "but", "by", "is", "at", "how", "why", "many", "in", "on", "go", "of", "he", "was", "this", "or",
 		"as", "if", "his", "also", "not", "it", "He", "She", "an", "able", "with", "I", "The", "will", "him", "be", "who", "has",
-		"We"}
+		"We", "are", "like", "than", "what", "your", "us"}
 
 	var ss []keyValue
 

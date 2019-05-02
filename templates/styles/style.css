@@ -24,11 +24,8 @@ html, body {
 }
 
 #summarizedText {
-    text-align: justify;
-    width: 220px;
     margin-left: 20px;
     padding-top: 45px;
-    position: absolute;
 }
 
 #topHeadline h2 {
@@ -63,8 +60,9 @@ header {
 footer {
     background-color: #69D7E4;
     padding: 10px;
-    text-align: center;
+    text-align: right;
     color: white;
+    font-family: 'Roboto Slab';
 }
 
 p {

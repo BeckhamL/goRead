@@ -8,6 +8,10 @@ import (
 	"github.com/barthr/newsapi"
 )
 
+const (
+	dateCAN = "January 2, 2006"
+)
+
 type Article struct {
 	Title    string
 	Author   string
@@ -16,6 +20,7 @@ type Article struct {
 	URLImage string
 	Website  string
 	Date     time.Time
+	Summary  string
 }
 
 func topHeadlines() []Article {
@@ -41,6 +46,7 @@ func topHeadlines() []Article {
 			URLImage: s.URLToImage,
 			Website:  s.Source.Name,
 			Date:     s.PublishedAt,
+			Summary:  getSummaryCNN(),
 		}
 
 		articles = append(articles, a)
