@@ -5,7 +5,7 @@
     <title>goRead</title>
     <link rel="stylesheet" type="text/css" href="styles/style.css">
     <link href="https://fonts.googleapis.com/css?family=Roboto+Slab" rel="stylesheet">
-    <link rel="icon" href="templates/images/book.png">
+    <link rel="icon" href="/images/book.png">
 </head>
 
 <body>
@@ -35,9 +35,9 @@
                 <p id="source"> Source: {{.Website}}</p>
                 <p id="datePublished">Date published: {{.Date}}</p>
                 <p>Top Keywords: {{.Keywords}}</p>
+                <p>Reduced text by: </p>
             </div>
             <p id="summarizedText">{{.Summary}}</p>
-            <p>Reduced text by: </p>
         </div>
         </a>
         {{end}}

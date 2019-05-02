@@ -25,7 +25,7 @@ html, body {
 
 #summarizedText {
     margin-left: 20px;
-    padding-top: 45px;
+    padding-right: 20px;
 }
 
 #topHeadline h2 {
@@ -44,7 +44,9 @@ html, body {
 }
 
 #textBox {
-
+    top: -20px;
+    position: relative;
+    line-height: 24px;
 }
 
 header {
