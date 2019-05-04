@@ -3,7 +3,6 @@ package main
 import (
 	"context"
 	"net/http"
-	"time"
 
 	"github.com/barthr/newsapi"
 )
@@ -15,11 +14,11 @@ const (
 type Article struct {
 	Title     string
 	Author    string
-	Keywords  [10]string
+	Keywords  [5]string
 	URL       string
 	URLImage  string
 	Website   string
-	Date      time.Time
+	Date      string
 	Summary   string
 	Reduction float64
 }
@@ -39,6 +38,11 @@ func topHeadlines() []Article {
 
 	for _, s := range sources.Articles {
 
+		t := s.PublishedAt
+		t.Format("Monday Jan 2, 3:04pm")
+		timeString := t.String()
+		timeString = timeString[0 : len(timeString)-10]
+
 		a := Article{
 			Title:     s.Title,
 			Author:    s.Author,
@@ -46,7 +50,7 @@ func topHeadlines() []Article {
 			URL:       s.URL,
 			URLImage:  s.URLToImage,
 			Website:   s.Source.Name,
-			Date:      s.PublishedAt,
+			Date:      timeString,
 			Summary:   getSummaryCNN(),
 			Reduction: getReductionPercentage(),
 		}

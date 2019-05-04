@@ -17,7 +17,7 @@ type keyValue struct {
 
 type currentArticle struct {
 	parsedString  string
-	frequentWords [10]string
+	frequentWords [5]string
 	titleWords    []string
 	totalWords    float64
 	summaryLength float64
@@ -26,12 +26,12 @@ type currentArticle struct {
 var cA = new(currentArticle)
 
 // Function that visits website and summarizes the text
-func getMostFrequentWordsCNN(url string) [10]string {
+func getMostFrequentWordsCNN(url string) [5]string {
 
 	c := colly.NewCollector()
 
 	var titleWords []string
-	var paragraphWords [10]string
+	var paragraphWords [5]string
 
 	c.OnHTML(".l-container", func(e *colly.HTMLElement) {
 
@@ -54,7 +54,7 @@ func getMostFrequentWordsCNN(url string) [10]string {
 			m = WordCountCNN(parsedString)
 			elements = sortMapCNN(m)
 
-			for i := 0; i < 10; i++ {
+			for i := 0; i < 5; i++ {
 				paragraphWords[i] = elements[i].Key
 			}
 
@@ -104,7 +104,7 @@ func sortMapCNN(myMap map[string]int) []keyValue {
 	fillerWords := []string{"the", "to", "of", "a", "in", "and", "were", "they", "that", "have",
 		"for", "been", "said", "but", "by", "is", "at", "how", "why", "many", "in", "on", "go", "of", "he", "was", "this", "or",
 		"as", "if", "his", "also", "not", "it", "He", "She", "an", "able", "with", "I", "The", "will", "him", "be", "who", "has",
-		"We", "are", "like", "than", "what", "your", "us", "had", "from", "would"}
+		"We", "are", "like", "than", "what", "your", "us", "had", "from", "would", "which", "now", "other", "we", "into", "could"}
 
 	var ss []keyValue
 
@@ -138,7 +138,19 @@ func stringInSliceCNN(a string, list []string) bool {
 }
 
 // Checks if there is at least one similar string in both arrays
-func intersectCNN(arr1 []string, arr2 [10]string) bool {
+func intersectFrequentCNN(arr1 []string, arr2 [5]string) bool {
+
+	for i := 0; i < len(arr1); i++ {
+		for j := 0; j < len(arr2); j++ {
+			if strings.ToLower(arr1[i]) == strings.ToLower(arr2[j]) {
+				return true
+			}
+		}
+	}
+	return false
+}
+
+func intersectTitleCNN(arr1 []string, arr2 []string) bool {
 
 	for i := 0; i < len(arr1); i++ {
 		for j := 0; j < len(arr2); j++ {
@@ -160,9 +172,8 @@ func getSummaryCNN() string {
 
 	for i := 0; i < len(sentences); i++ {
 		words = strings.Split(sentences[i], " ")
-		if intersectCNN(words, cA.frequentWords) {
+		if intersectFrequentCNN(words, cA.frequentWords) {
 			response = response + "." + sentences[i]
-
 		}
 	}
 
@@ -171,6 +182,7 @@ func getSummaryCNN() string {
 	return response
 }
 
+// Get the reduction percentage
 func getReductionPercentage() float64 {
 
 	return math.Round((cA.totalWords / cA.summaryLength) * 100)
