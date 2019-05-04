@@ -2,6 +2,7 @@ package main
 
 import (
 	"log"
+	"math"
 	"regexp"
 	"sort"
 	"strings"
@@ -18,6 +19,8 @@ type currentArticle struct {
 	parsedString  string
 	frequentWords [10]string
 	titleWords    []string
+	totalWords    float64
+	summaryLength float64
 }
 
 var cA = new(currentArticle)
@@ -57,9 +60,10 @@ func getMostFrequentWordsCNN(url string) [10]string {
 
 			cA.frequentWords = paragraphWords
 			cA.parsedString = parsedString
+			words := len(strings.Fields(paragraph))
+			cA.totalWords = float64(words)
 			cA.titleWords = titleWords
 
-			//getSummaryCNN(parsedString, paragraphWords, titleWords)
 			getSummaryCNN()
 		}
 	})
@@ -100,7 +104,7 @@ func sortMapCNN(myMap map[string]int) []keyValue {
 	fillerWords := []string{"the", "to", "of", "a", "in", "and", "were", "they", "that", "have",
 		"for", "been", "said", "but", "by", "is", "at", "how", "why", "many", "in", "on", "go", "of", "he", "was", "this", "or",
 		"as", "if", "his", "also", "not", "it", "He", "She", "an", "able", "with", "I", "The", "will", "him", "be", "who", "has",
-		"We", "are", "like", "than", "what", "your", "us", "had", "from"}
+		"We", "are", "like", "than", "what", "your", "us", "had", "from", "would"}
 
 	var ss []keyValue
 
@@ -134,7 +138,7 @@ func stringInSliceCNN(a string, list []string) bool {
 }
 
 // Checks if there is at least one similar string in both arrays
-func intersectCNN(arr1 []string, arr2 []string) bool {
+func intersectCNN(arr1 []string, arr2 [10]string) bool {
 
 	for i := 0; i < len(arr1); i++ {
 		for j := 0; j < len(arr2); j++ {
@@ -147,7 +151,6 @@ func intersectCNN(arr1 []string, arr2 []string) bool {
 }
 
 // Extract summary from text
-//func getSummaryCNN(paragraph string, frequentWords [10]string, titleText []string) string {
 func getSummaryCNN() string {
 
 	var response string
@@ -157,12 +160,18 @@ func getSummaryCNN() string {
 
 	for i := 0; i < len(sentences); i++ {
 		words = strings.Split(sentences[i], " ")
-		if intersectCNN(words, cA.titleWords) {
+		if intersectCNN(words, cA.frequentWords) {
 			response = response + "." + sentences[i]
+
 		}
 	}
 
-	//fmt.Println(response)
+	cA.summaryLength = float64(len(response))
 
 	return response
+}
+
+func getReductionPercentage() float64 {
+
+	return math.Round((cA.totalWords / cA.summaryLength) * 100)
 }

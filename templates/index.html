@@ -14,7 +14,6 @@
         <h2>goRead</h2>
     </header>
               
-
     <div id="intro">
         <h1><b>Make following the news easier</b></h1>
         <p>Top headlining news articles from major outlets readily summarized</p>
@@ -35,7 +34,7 @@
                 <p id="source"> Source: {{.Website}}</p>
                 <p id="datePublished">Date published: {{.Date}}</p>
                 <p>Top Keywords: {{.Keywords}}</p>
-                <p>Reduced text by: </p>
+                <p>Reduced text by: <b>{{.Reduction}}%</b></p>
             </div>
             <p id="summarizedText">{{.Summary}}</p>
         </div>

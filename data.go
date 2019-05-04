@@ -13,14 +13,15 @@ const (
 )
 
 type Article struct {
-	Title    string
-	Author   string
-	Keywords [10]string
-	URL      string
-	URLImage string
-	Website  string
-	Date     time.Time
-	Summary  string
+	Title     string
+	Author    string
+	Keywords  [10]string
+	URL       string
+	URLImage  string
+	Website   string
+	Date      time.Time
+	Summary   string
+	Reduction float64
 }
 
 func topHeadlines() []Article {
@@ -39,14 +40,15 @@ func topHeadlines() []Article {
 	for _, s := range sources.Articles {
 
 		a := Article{
-			Title:    s.Title,
-			Author:   s.Author,
-			Keywords: getMostFrequentWordsCNN(s.URL),
-			URL:      s.URL,
-			URLImage: s.URLToImage,
-			Website:  s.Source.Name,
-			Date:     s.PublishedAt,
-			Summary:  getSummaryCNN(),
+			Title:     s.Title,
+			Author:    s.Author,
+			Keywords:  getMostFrequentWordsCNN(s.URL),
+			URL:       s.URL,
+			URLImage:  s.URLToImage,
+			Website:   s.Source.Name,
+			Date:      s.PublishedAt,
+			Summary:   getSummaryCNN(),
+			Reduction: getReductionPercentage(),
 		}
 
 		articles = append(articles, a)
