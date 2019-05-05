@@ -13,21 +13,21 @@
     <header>
         <h2>goRead</h2>
     </header>
+
+    <div id="hello">
+        <hello></hello>
+    </div>
               
     <div id="intro">
         <h1><b>Make following the news easier</b></h1>
         <p>Top headlining news articles from major outlets readily summarized</p>
     </div>
 
-    <div id="hello">
-        <hello></hello>
-    </div>
-
     <div>
         {{ range .}}
         <a href="{{.URL}}" target="_blank" style="text-decoration:none">
         <div id="topHeadline">
-            <img src="{{.URLImage}}" height="250" width="250"></img>
+            <img src="{{.URLImage}}" height="300" width="300"></img>
             <div id="textBox">
                 <h2 id="title">{{.Title}}</h2>
                 <p id="author">Author: {{.Author}}</p>

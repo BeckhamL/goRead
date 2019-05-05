@@ -10,12 +10,10 @@ html, body {
 }
 
 #topHeadline {
-    border: 1px solid gray;
+    border: 2px solid black;
     margin-top: 15px;
-    margin-bottom: 20px;
     margin-left: 220px;
     margin-right: 220px;
-    overflow: hidden;
     padding-top: 20px;
     background-color: white;
     border-radius: 12px;
@@ -23,8 +21,9 @@ html, body {
 }
 
 #summarizedText {
-    margin-left: 20px;
+    padding-left: 20px;
     padding-right: 20px;
+    padding-top: 25px;
 }
 
 #topHeadline h2 {
@@ -39,7 +38,7 @@ html, body {
 }
 
 #topHeadline:hover {
-    box-shadow: 0 0 11px rgba(33,33,33,.2);
+    box-shadow: 0 0 15px rgba(33,33,33,.2);
 }
 
 #textBox {
@@ -64,6 +63,7 @@ footer {
     text-align: right;
     color: white;
     font-family: 'Roboto Slab';
+    margin-top: 30px;
 }
 
 p {

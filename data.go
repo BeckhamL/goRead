@@ -52,7 +52,7 @@ func topHeadlines() []Article {
 			Website:   s.Source.Name,
 			Date:      timeString,
 			Summary:   getSummaryCNN(),
-			Reduction: getReductionPercentage(),
+			Reduction: getReductionPercentageCNN(),
 		}
 
 		articles = append(articles, a)

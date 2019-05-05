@@ -2,13 +2,28 @@ package main
 
 import (
 	"log"
+	"math"
 	"regexp"
 	"sort"
 	"strings"
+
+	"github.com/gocolly/colly"
 )
 
+var cATIMES = new(currentArticle)
+
+func getMostFrequentWordsTIMES(url string) [5]string {
+
+	c := colly.NewCollector()
+
+	var titleWords []string
+	var paragraphWords [5]string
+
+	return paragraphWords
+}
+
 // Function to remove all unecessary punctuation and character
-func parseStringTIME(text string) string {
+func parseStringTIMES(text string) string {
 
 	reg, err := regexp.Compile("[^a-zA-Z0-9'.]+")
 	if err != nil {
@@ -21,7 +36,7 @@ func parseStringTIME(text string) string {
 }
 
 // Function to find words
-func WordCountTIME(s string) map[string]int {
+func WordCountTIMES(s string) map[string]int {
 
 	words := strings.Fields(s)
 	m := make(map[string]int)
@@ -38,7 +53,8 @@ func sortMapTIME(myMap map[string]int) []keyValue {
 	fillerWords := []string{"the", "to", "of", "a", "in", "and", "were", "they", "that", "have",
 		"for", "been", "said", "but", "by", "is", "at", "how", "why", "many", "in", "on", "go", "of", "he", "was", "this", "or",
 		"as", "if", "his", "also", "not", "it", "He", "She", "an", "able", "with", "I", "The", "will", "him", "be", "who", "has",
-		"We", "are", "like", "than", "what", "your", "us", "had", "from"}
+		"We", "are", "like", "than", "what", "your", "us", "had", "from", "would", "which", "now", "other", "we", "into", "could", "she",
+		"her", "about"}
 
 	var ss []keyValue
 
@@ -52,7 +68,7 @@ func sortMapTIME(myMap map[string]int) []keyValue {
 	})
 
 	for i := 0; i < len(ss); i++ {
-		if stringInSliceTIME(ss[i].Key, fillerWords) {
+		if stringInSliceTIMES(ss[i].Key, fillerWords) {
 			ss = append(ss[:i], ss[i+1:]...)
 			i--
 		}
@@ -62,11 +78,62 @@ func sortMapTIME(myMap map[string]int) []keyValue {
 }
 
 // Checks if string is contained in array
-func stringInSliceTIME(a string, list []string) bool {
+func stringInSliceTIMES(a string, list []string) bool {
 	for _, b := range list {
 		if b == a {
 			return true
 		}
 	}
 	return false
+}
+
+// Checks if there is at least one similar string in both arrays
+func intersectFrequentTIMES(arr1 []string, arr2 [5]string) bool {
+
+	for i := 0; i < len(arr1); i++ {
+		for j := 0; j < len(arr2); j++ {
+			if strings.ToLower(arr1[i]) == strings.ToLower(arr2[j]) {
+				return true
+			}
+		}
+	}
+	return false
+}
+
+func intersectTitleTIMES(arr1 []string, arr2 []string) bool {
+
+	for i := 0; i < len(arr1); i++ {
+		for j := 0; j < len(arr2); j++ {
+			if strings.ToLower(arr1[i]) == strings.ToLower(arr2[j]) {
+				return true
+			}
+		}
+	}
+	return false
+}
+
+// Extract summary from text
+func getSummaryTIMES() string {
+
+	var response string
+	var sentences []string
+	var words []string
+	sentences = strings.Split(cATIMES.parsedString, ".")
+
+	for i := 0; i < len(sentences); i++ {
+		words = strings.Split(sentences[i], " ")
+		if intersectFrequentCNN(words, cATIMES.frequentWords) {
+			response = response + "." + sentences[i]
+		}
+	}
+
+	cATIMES.summaryLength = float64(len(response))
+
+	return response
+}
+
+// Get the reduction percentage
+func getReductionPercentageTIMES() float64 {
+
+	return math.Round((cATIMES.totalWords / cATIMES.summaryLength) * 100)
 }

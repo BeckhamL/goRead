@@ -23,7 +23,7 @@ type currentArticle struct {
 	summaryLength float64
 }
 
-var cA = new(currentArticle)
+var cACNN = new(currentArticle)
 
 // Function that visits website and summarizes the text
 func getMostFrequentWordsCNN(url string) [5]string {
@@ -58,11 +58,11 @@ func getMostFrequentWordsCNN(url string) [5]string {
 				paragraphWords[i] = elements[i].Key
 			}
 
-			cA.frequentWords = paragraphWords
-			cA.parsedString = parsedString
+			cACNN.frequentWords = paragraphWords
+			cACNN.parsedString = parsedString
 			words := len(strings.Fields(paragraph))
-			cA.totalWords = float64(words)
-			cA.titleWords = titleWords
+			cACNN.totalWords = float64(words)
+			cACNN.titleWords = titleWords
 
 			getSummaryCNN()
 		}
@@ -104,7 +104,8 @@ func sortMapCNN(myMap map[string]int) []keyValue {
 	fillerWords := []string{"the", "to", "of", "a", "in", "and", "were", "they", "that", "have",
 		"for", "been", "said", "but", "by", "is", "at", "how", "why", "many", "in", "on", "go", "of", "he", "was", "this", "or",
 		"as", "if", "his", "also", "not", "it", "He", "She", "an", "able", "with", "I", "The", "will", "him", "be", "who", "has",
-		"We", "are", "like", "than", "what", "your", "us", "had", "from", "would", "which", "now", "other", "we", "into", "could"}
+		"We", "are", "like", "than", "what", "your", "us", "had", "from", "would", "which", "now", "other", "we", "into", "could", "she",
+		"her", "about"}
 
 	var ss []keyValue
 
@@ -168,22 +169,22 @@ func getSummaryCNN() string {
 	var response string
 	var sentences []string
 	var words []string
-	sentences = strings.Split(cA.parsedString, ".")
+	sentences = strings.Split(cACNN.parsedString, ".")
 
 	for i := 0; i < len(sentences); i++ {
 		words = strings.Split(sentences[i], " ")
-		if intersectFrequentCNN(words, cA.frequentWords) {
+		if intersectFrequentCNN(words, cACNN.frequentWords) {
 			response = response + "." + sentences[i]
 		}
 	}
 
-	cA.summaryLength = float64(len(response))
+	cACNN.summaryLength = float64(len(response))
 
 	return response
 }
 
 // Get the reduction percentage
-func getReductionPercentage() float64 {
+func getReductionPercentageCNN() float64 {
 
-	return math.Round((cA.totalWords / cA.summaryLength) * 100)
+	return math.Round((cACNN.totalWords / cACNN.summaryLength) * 100)
 }

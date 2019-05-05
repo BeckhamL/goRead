@@ -9,17 +9,12 @@
     export default {
         name: "hello",
         data: () => ({
-            // reactive data property of the component.
             webpack: 'Powered by webpack!',
         }),
     }
 </script>
 
 <style scoped>
-    /*
-     * Some styles so that our first component
-     * looks somewhat special
-    */
     .hello {
         margin: 0 auto;
         font-family: sans-serif;
