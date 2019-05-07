@@ -6,21 +6,19 @@ import (
 	"regexp"
 	"sort"
 	"strings"
-
-	"github.com/gocolly/colly"
 )
 
 var cATIMES = new(currentArticle)
 
-func getMostFrequentWordsTIMES(url string) [5]string {
+// func getMostFrequentWordsTIMES(url string) [5]string {
 
-	c := colly.NewCollector()
+// 	c := colly.NewCollector()
 
-	var titleWords []string
-	var paragraphWords [5]string
+// 	var titleWords []string
+// 	var paragraphWords [5]string
 
-	return paragraphWords
-}
+// 	return paragraphWords
+// }
 
 // Function to remove all unecessary punctuation and character
 func parseStringTIMES(text string) string {

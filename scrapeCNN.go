@@ -52,7 +52,7 @@ func getMostFrequentWordsCNN(url string) [5]string {
 			m := make(map[string]int)
 			var elements []keyValue
 			m = WordCountCNN(parsedString)
-			elements = sortMapCNN(m)
+			elements = sortWordsCNN(m)
 
 			for i := 0; i < 5; i++ {
 				paragraphWords[i] = elements[i].Key
@@ -99,13 +99,13 @@ func WordCountCNN(s string) map[string]int {
 }
 
 // Takes a map and returns a slice of keyValue sorted by highest frequency
-func sortMapCNN(myMap map[string]int) []keyValue {
+func sortWordsCNN(myMap map[string]int) []keyValue {
 
 	fillerWords := []string{"the", "to", "of", "a", "in", "and", "were", "they", "that", "have",
 		"for", "been", "said", "but", "by", "is", "at", "how", "why", "many", "in", "on", "go", "of", "he", "was", "this", "or",
 		"as", "if", "his", "also", "not", "it", "He", "She", "an", "able", "with", "I", "The", "will", "him", "be", "who", "has",
 		"We", "are", "like", "than", "what", "your", "us", "had", "from", "would", "which", "now", "other", "we", "into", "could", "she",
-		"her", "about"}
+		"her", "about", "you", "said."}
 
 	var ss []keyValue
 
@@ -163,20 +163,61 @@ func intersectTitleCNN(arr1 []string, arr2 []string) bool {
 	return false
 }
 
+func countWordPriority(arr1 []string, arr2 []string) int {
+
+	counter := 0
+
+	for i := 0; i < len(arr1); i++ {
+		for j := 0; j < len(arr2); j++ {
+			if strings.ToLower(arr1[i]) == strings.ToLower(arr2[j]) {
+				counter++
+			}
+		}
+	}
+
+	return counter
+}
+
+func sortSentencesCNN(myMap map[string]int) []keyValue {
+
+	var kv []keyValue
+
+	for k, v := range myMap {
+		kv = append(kv, keyValue{k, v})
+	}
+
+	// Sorting words by frequency
+	sort.Slice(kv, func(i, j int) bool {
+		return kv[i].Value > kv[j].Value
+	})
+
+	return kv[5:]
+}
+
 // Extract summary from text
 func getSummaryCNN() string {
 
 	var response string
 	var sentences []string
 	var words []string
+
+	sentenceWeight := make(map[string]int)
+
 	sentences = strings.Split(cACNN.parsedString, ".")
 
 	for i := 0; i < len(sentences); i++ {
 		words = strings.Split(sentences[i], " ")
-		if intersectFrequentCNN(words, cACNN.frequentWords) {
-			response = response + "." + sentences[i]
-		}
+		sentenceWeight[sentences[i]] = countWordPriority(words, cACNN.titleWords)
 	}
+
+	summarizedSentences := sortSentencesCNN(sentenceWeight)
+	response = summarizedSentences[0].Key
+
+	for i := 1; i < 5; i++ {
+		response = response + ". " + summarizedSentences[i].Key
+	}
+
+	response = response + "."
 
 	cACNN.summaryLength = float64(len(response))
 
