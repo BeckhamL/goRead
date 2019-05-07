@@ -48,7 +48,7 @@ html, body {
 }
 
 header {
-    background-color: #69D7E4;
+    background-image: linear-gradient(#69D7E4, #5CD588);
     padding-top: 10px;
     padding-left: 10px;
     padding-bottom: 1px;
@@ -58,7 +58,7 @@ header {
 }
 
 footer {
-    background-color: #69D7E4;
+    background-image: linear-gradient(#5CD588, #69D7E4);
     padding: 10px;
     text-align: right;
     color: white;

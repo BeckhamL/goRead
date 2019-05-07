@@ -52,7 +52,7 @@ func sortMapTIME(myMap map[string]int) []keyValue {
 		"for", "been", "said", "but", "by", "is", "at", "how", "why", "many", "in", "on", "go", "of", "he", "was", "this", "or",
 		"as", "if", "his", "also", "not", "it", "He", "She", "an", "able", "with", "I", "The", "will", "him", "be", "who", "has",
 		"We", "are", "like", "than", "what", "your", "us", "had", "from", "would", "which", "now", "other", "we", "into", "could", "she",
-		"her", "about"}
+		"her", "about", "you", "said."}
 
 	var ss []keyValue
 
