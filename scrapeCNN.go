@@ -191,7 +191,7 @@ func sortSentencesCNN(myMap map[string]int) []keyValue {
 		return kv[i].Value > kv[j].Value
 	})
 
-	return kv[5:]
+	return kv
 }
 
 // Extract summary from text
@@ -213,13 +213,17 @@ func getSummaryCNN() string {
 	summarizedSentences := sortSentencesCNN(sentenceWeight)
 	response = summarizedSentences[0].Key
 
-	for i := 1; i < 5; i++ {
-		response = response + ". " + summarizedSentences[i].Key
+	if len(summarizedSentences) < 5 {
+		cACNN.summaryLength = 0
+		return response
+	} else {
+		for i := 1; i < 5; i++ {
+			response = response + ". " + summarizedSentences[i].Key
+		}
+		cACNN.summaryLength = float64(len(response))
 	}
 
 	response = response + "."
-
-	cACNN.summaryLength = float64(len(response))
 
 	return response
 }
