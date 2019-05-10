@@ -6,19 +6,59 @@ import (
 	"regexp"
 	"sort"
 	"strings"
+
+	"github.com/gocolly/colly"
 )
 
 var cATIMES = new(currentArticle)
 
-// func getMostFrequentWordsTIMES(url string) [5]string {
+func getMostFrequentWordsTIMES(url string) [5]string {
 
-// 	c := colly.NewCollector()
+	c := colly.NewCollector()
 
-// 	var titleWords []string
-// 	var paragraphWords [5]string
+	var titleWords []string
+	var paragraphWords [5]string
 
-// 	return paragraphWords
-// }
+	c.OnHTML(".l-container", func(e *colly.HTMLElement) {
+
+		paragraph := e.ChildText("story-body__introduction")
+		title := e.ChildText("story-body__h1")
+
+		if title != "" {
+
+			counter := len(strings.Fields(title))
+			titleWords = make([]string, counter)
+			for i, words := range strings.Fields(title) {
+				titleWords[i] = parseStringTIMES(words)
+			}
+		}
+
+		if paragraph != "" {
+
+			parsedString := parseStringTIMES(paragraph)
+			m := make(map[string]int)
+			var elements []keyValue
+			m = WordCountTIMES(parsedString)
+			elements = sortMapTIMES(m)
+
+			for i := 0; i < 5; i++ {
+				paragraphWords[i] = elements[i].Key
+			}
+
+			cATIMES.frequentWords = paragraphWords
+			cATIMES.parsedString = parsedString
+			words := len(strings.Fields(paragraph))
+			cATIMES.totalWords = float64(words)
+			cATIMES.titleWords = titleWords
+
+			getSummaryTIMES()
+		}
+	})
+
+	c.Visit(url)
+
+	return paragraphWords
+}
 
 // Function to remove all unecessary punctuation and character
 func parseStringTIMES(text string) string {
@@ -46,7 +86,7 @@ func WordCountTIMES(s string) map[string]int {
 }
 
 // Takes a map and returns a slice of keyValue sorted by highest frequency
-func sortMapTIME(myMap map[string]int) []keyValue {
+func sortMapTIMES(myMap map[string]int) []keyValue {
 
 	fillerWords := []string{"the", "to", "of", "a", "in", "and", "were", "they", "that", "have",
 		"for", "been", "said", "but", "by", "is", "at", "how", "why", "many", "in", "on", "go", "of", "he", "was", "this", "or",
