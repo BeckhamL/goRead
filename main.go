@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"html/template"
 	"log"
 	"net/http"
@@ -12,7 +11,8 @@ import (
 var t = template.Must(template.ParseFiles("templates/index.html"))
 
 func runServ(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "access")
+
+	http.ServeFile(w, r, "templates/intro.html")
 }
 
 // CNN route
