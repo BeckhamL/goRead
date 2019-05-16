@@ -10,16 +10,17 @@ import (
 	"github.com/gocolly/colly"
 )
 
-var cATIMES = new(currentArticle)
+var cABBCNews = new(currentArticle)
 
-func getMostFrequentWordsTIMES(url string) [5]string {
+func getMostFrequentWordsBBCNews(url string) [5]string {
 
 	c := colly.NewCollector()
 
 	var titleWords []string
 	var paragraphWords [5]string
 
-	c.OnHTML(".l-container", func(e *colly.HTMLElement) {
+	// THIS IS FOR BBC-NEWS
+	c.OnHTML("story-body", func(e *colly.HTMLElement) {
 
 		paragraph := e.ChildText("story-body__introduction")
 		title := e.ChildText("story-body__h1")
@@ -29,29 +30,29 @@ func getMostFrequentWordsTIMES(url string) [5]string {
 			counter := len(strings.Fields(title))
 			titleWords = make([]string, counter)
 			for i, words := range strings.Fields(title) {
-				titleWords[i] = parseStringTIMES(words)
+				titleWords[i] = parseStringBBCNews(words)
 			}
 		}
 
 		if paragraph != "" {
 
-			parsedString := parseStringTIMES(paragraph)
+			parsedString := parseStringBBCNews(paragraph)
 			m := make(map[string]int)
 			var elements []keyValue
-			m = WordCountTIMES(parsedString)
-			elements = sortMapTIMES(m)
+			m = WordCountBBCNews(parsedString)
+			elements = sortMapBBCNews(m)
 
 			for i := 0; i < 5; i++ {
 				paragraphWords[i] = elements[i].Key
 			}
 
-			cATIMES.frequentWords = paragraphWords
-			cATIMES.parsedString = parsedString
+			cABBCNews.frequentWords = paragraphWords
+			cABBCNews.parsedString = parsedString
 			words := len(strings.Fields(paragraph))
-			cATIMES.totalWords = float64(words)
-			cATIMES.titleWords = titleWords
+			cABBCNews.totalWords = float64(words)
+			cABBCNews.titleWords = titleWords
 
-			getSummaryTIMES()
+			getSummaryBBCNews()
 		}
 	})
 
@@ -61,7 +62,7 @@ func getMostFrequentWordsTIMES(url string) [5]string {
 }
 
 // Function to remove all unecessary punctuation and character
-func parseStringTIMES(text string) string {
+func parseStringBBCNews(text string) string {
 
 	reg, err := regexp.Compile("[^a-zA-Z0-9'.]+")
 	if err != nil {
@@ -74,7 +75,7 @@ func parseStringTIMES(text string) string {
 }
 
 // Function to find words
-func WordCountTIMES(s string) map[string]int {
+func WordCountBBCNews(s string) map[string]int {
 
 	words := strings.Fields(s)
 	m := make(map[string]int)
@@ -86,7 +87,7 @@ func WordCountTIMES(s string) map[string]int {
 }
 
 // Takes a map and returns a slice of keyValue sorted by highest frequency
-func sortMapTIMES(myMap map[string]int) []keyValue {
+func sortMapBBCNews(myMap map[string]int) []keyValue {
 
 	fillerWords := []string{"the", "to", "of", "a", "in", "and", "were", "they", "that", "have",
 		"for", "been", "said", "but", "by", "is", "at", "how", "why", "many", "in", "on", "go", "of", "he", "was", "this", "or",
@@ -106,7 +107,7 @@ func sortMapTIMES(myMap map[string]int) []keyValue {
 	})
 
 	for i := 0; i < len(ss); i++ {
-		if stringInSliceTIMES(ss[i].Key, fillerWords) {
+		if stringInSliceBBCNews(ss[i].Key, fillerWords) {
 			ss = append(ss[:i], ss[i+1:]...)
 			i--
 		}
@@ -116,7 +117,7 @@ func sortMapTIMES(myMap map[string]int) []keyValue {
 }
 
 // Checks if string is contained in array
-func stringInSliceTIMES(a string, list []string) bool {
+func stringInSliceBBCNews(a string, list []string) bool {
 	for _, b := range list {
 		if b == a {
 			return true
@@ -126,7 +127,7 @@ func stringInSliceTIMES(a string, list []string) bool {
 }
 
 // Checks if there is at least one similar string in both arrays
-func intersectFrequentTIMES(arr1 []string, arr2 [5]string) bool {
+func intersectFrequentBBCNews(arr1 []string, arr2 [5]string) bool {
 
 	for i := 0; i < len(arr1); i++ {
 		for j := 0; j < len(arr2); j++ {
@@ -138,7 +139,7 @@ func intersectFrequentTIMES(arr1 []string, arr2 [5]string) bool {
 	return false
 }
 
-func intersectTitleTIMES(arr1 []string, arr2 []string) bool {
+func intersectTitleBBCNews(arr1 []string, arr2 []string) bool {
 
 	for i := 0; i < len(arr1); i++ {
 		for j := 0; j < len(arr2); j++ {
@@ -151,27 +152,27 @@ func intersectTitleTIMES(arr1 []string, arr2 []string) bool {
 }
 
 // Extract summary from text
-func getSummaryTIMES() string {
+func getSummaryBBCNews() string {
 
 	var response string
 	var sentences []string
 	var words []string
-	sentences = strings.Split(cATIMES.parsedString, ".")
+	sentences = strings.Split(cABBCNews.parsedString, ".")
 
 	for i := 0; i < len(sentences); i++ {
 		words = strings.Split(sentences[i], " ")
-		if intersectFrequentCNN(words, cATIMES.frequentWords) {
+		if intersectFrequentBBCNews(words, cABBCNews.frequentWords) {
 			response = response + "." + sentences[i]
 		}
 	}
 
-	cATIMES.summaryLength = float64(len(response))
+	cABBCNews.summaryLength = float64(len(response))
 
 	return response
 }
 
 // Get the reduction percentage
-func getReductionPercentageTIMES() float64 {
+func getReductionPercentageBBCNews() float64 {
 
-	return math.Round((cATIMES.totalWords / cATIMES.summaryLength) * 100)
+	return math.Round((cABBCNews.totalWords / cABBCNews.summaryLength) * 100)
 }
