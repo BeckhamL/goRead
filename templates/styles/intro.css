@@ -1,3 +1,43 @@
-body {
+/* body {
   background-color: #69D7E4;
+} */
+
+#intro {
+  font-family: 'Roboto Slab';
+  text-align: center;
+}
+
+.grid-container {
+  display: grid;
+  grid-template-columns: auto auto auto;
+  padding: 10px;
+}
+.grid-item {
+  
+  /* border: 1px solid rgba(0, 0, 0, 0.8); */
+  font-size: 30px;
+  text-align: center;
+}
+
+.grid-item:hover {
+  box-shadow: 0 0 15px rgba(33,33,33,.2);
+}
+
+header {
+  background-color: #69D7E4;
+  padding-top: 10px;
+  padding-left: 10px;
+  padding-bottom: 1px;
+  font-size: 35px;
+  font-family: 'Roboto Slab';
+  color: white;
+}
+
+footer {
+  background-color: #69D7E4;
+  padding: 10px;
+  text-align: right;
+  color: white;
+  font-family: 'Roboto Slab';
+  margin-top: 30px;
 }

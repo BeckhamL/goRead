@@ -4,11 +4,6 @@ html, body {
     background-color: #fafafa;
 }
 
-#intro {
-    font-family: 'Roboto Slab';
-    text-align: center;
-}
-
 #topHeadline {
     border: 2px solid black;
     margin-top: 15px;

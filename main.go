@@ -47,5 +47,7 @@ func main() {
 	server.HandleFunc("/BBCNews", BBCNews)
 
 	server.PathPrefix("/styles/").Handler(http.StripPrefix("/styles/", http.FileServer(http.Dir("templates/styles/"))))
+	server.PathPrefix("/newsIcons/").Handler(http.StripPrefix("/newsIcons/", http.FileServer(http.Dir("templates/newsIcons/"))))
+
 	http.ListenAndServe(":8001", server)
 }

@@ -3,6 +3,9 @@
 
 <head>
     <title>goRead</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" type="text/css" href="styles/style.css">
     <link href="https://fonts.googleapis.com/css?family=Roboto+Slab" rel="stylesheet">
     <link rel="icon" href="/images/book.png">
@@ -17,17 +20,7 @@
     <div id="hello">
         <hello></hello>
     </div>
-              
-    <div id="intro">
-        <h1><b>Make following the news easier</b></h1>
-        <p>Top headlining news articles from major outlets readily summarized</p>
-    </div>
-
-    <!-- <div id="checkboxes">
-        <input type="checkbox">CNN<br>
-        <input type="checkbox">TIMES<br>
-    </div> -->
-
+    
     <div>
         {{ range .}}
         <a href="{{.URL}}" target="_blank" style="text-decoration:none">
