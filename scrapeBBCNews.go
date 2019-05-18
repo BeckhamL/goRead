@@ -39,7 +39,7 @@ func getMostFrequentWordsBBCNews(url string) [5]string {
 			m := make(map[string]int)
 			var elements []keyValue
 			m = WordCountBBCNews(parsedString)
-			elements = sortMapBBCNews(m)
+			elements = sortWordsBBCNews(m)
 
 			for i := 0; i < 5; i++ {
 				paragraphWords[i] = elements[i].Key
@@ -86,7 +86,7 @@ func WordCountBBCNews(s string) map[string]int {
 }
 
 // Takes a map and returns a slice of keyValue sorted by highest frequency
-func sortMapBBCNews(myMap map[string]int) []keyValue {
+func sortWordsBBCNews(myMap map[string]int) []keyValue {
 
 	fillerWords := []string{"the", "to", "of", "a", "in", "and", "were", "they", "that", "have",
 		"for", "been", "said", "but", "by", "is", "at", "how", "why", "many", "in", "on", "go", "of", "he", "was", "this", "or",
@@ -150,22 +150,67 @@ func intersectTitleBBCNews(arr1 []string, arr2 []string) bool {
 	return false
 }
 
+func countWordPriorityBBCNews(arr1 []string, arr2 []string) int {
+
+	counter := 0
+
+	for i := 0; i < len(arr1); i++ {
+		for j := 0; j < len(arr2); j++ {
+			if strings.ToLower(arr1[i]) == strings.ToLower(arr2[j]) {
+				counter++
+			}
+		}
+	}
+
+	return counter
+}
+
+func sortSentencesBBCNews(myMap map[string]int) []keyValue {
+
+	var kv []keyValue
+
+	for k, v := range myMap {
+		kv = append(kv, keyValue{k, v})
+	}
+
+	// Sorting words by frequency
+	sort.Slice(kv, func(i, j int) bool {
+		return kv[i].Value > kv[j].Value
+	})
+
+	return kv
+}
+
 // Extract summary from text
 func getSummaryBBCNews() string {
 
 	var response string
 	var sentences []string
 	var words []string
+
+	sentenceWeight := make(map[string]int)
+
 	sentences = strings.Split(cABBCNews.parsedString, ".")
 
 	for i := 0; i < len(sentences); i++ {
 		words = strings.Split(sentences[i], " ")
-		if intersectFrequentBBCNews(words, cABBCNews.frequentWords) {
-			response = response + "." + sentences[i]
-		}
+		sentenceWeight[sentences[i]] = countWordPriorityBBCNews(words, cABBCNews.titleWords)
 	}
 
-	cABBCNews.summaryLength = float64(len(response))
+	summarizedSentences := sortSentencesBBCNews(sentenceWeight)
+	response = summarizedSentences[0].Key
+
+	if len(summarizedSentences) < 5 {
+		cABBCNews.summaryLength = 0
+		return response
+	} else {
+		for i := 1; i < 5; i++ {
+			response = response + ". " + summarizedSentences[i].Key
+		}
+		cABBCNews.summaryLength = float64(len(response))
+	}
+
+	response = response + "."
 
 	return response
 }
