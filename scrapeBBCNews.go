@@ -19,11 +19,10 @@ func getMostFrequentWordsBBCNews(url string) [5]string {
 	var titleWords []string
 	var paragraphWords [5]string
 
-	// THIS IS FOR BBC-NEWS
-	c.OnHTML("story-body", func(e *colly.HTMLElement) {
+	c.OnHTML(".story-body", func(e *colly.HTMLElement) {
 
-		paragraph := e.ChildText("story-body__introduction")
-		title := e.ChildText("story-body__h1")
+		paragraph := e.ChildText(".story-body__inner")
+		title := e.ChildText(".story-body__h1")
 
 		if title != "" {
 
@@ -93,7 +92,7 @@ func sortMapBBCNews(myMap map[string]int) []keyValue {
 		"for", "been", "said", "but", "by", "is", "at", "how", "why", "many", "in", "on", "go", "of", "he", "was", "this", "or",
 		"as", "if", "his", "also", "not", "it", "He", "She", "an", "able", "with", "I", "The", "will", "him", "be", "who", "has",
 		"We", "are", "like", "than", "what", "your", "us", "had", "from", "would", "which", "now", "other", "we", "into", "could", "she",
-		"her", "about", "you", "said."}
+		"her", "about", "you", "said.", "Image"}
 
 	var ss []keyValue
 

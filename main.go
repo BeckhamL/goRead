@@ -39,12 +39,24 @@ func BBCNews(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func BusinessInsider(w http.ResponseWriter, r *http.Request) {
+
+	var articles = topHeadlinesBusinessInsider()
+
+	HTMLerr := t.ExecuteTemplate(w, "index.html", articles)
+
+	if HTMLerr != nil {
+		log.Printf("template parsing err:", HTMLerr)
+	}
+}
+
 func main() {
 
 	server := mux.NewRouter()
 	server.HandleFunc("/", runServ)
 	server.HandleFunc("/CNN", CNN)
 	server.HandleFunc("/BBCNews", BBCNews)
+	server.HandleFunc("/BusinessInsider", BusinessInsider)
 
 	server.PathPrefix("/styles/").Handler(http.StripPrefix("/styles/", http.FileServer(http.Dir("templates/styles/"))))
 	server.PathPrefix("/newsIcons/").Handler(http.StripPrefix("/newsIcons/", http.FileServer(http.Dir("templates/newsIcons/"))))
