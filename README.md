@@ -1,6 +1,6 @@
 # goRead
 
-An application that takes the top articles and summarizes them.
+An application that takes the top articles from various news outlets and summarizes them.
 
 Used to pull top headlines from news websites: [https://github.com/barthr/newsapi](https://github.com/barthr/newsapi)
 <br/>
