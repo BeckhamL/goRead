@@ -6,4 +6,7 @@ Used to pull top headlines from news websites: [https://github.com/barthr/newsap
 <br/>
 Used to scrape and crawl website: [https://github.com/gocolly/colly](https://github.com/gocolly/colly)
 <br/>
+<br/>
+<br/>
+<br/>
 Powered by [NewsAPI.org](NewsAPI.org)
