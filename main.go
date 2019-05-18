@@ -51,6 +51,18 @@ func BusinessInsider(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// CBC route
+func CBC(w http.ResponseWriter, r *http.Request) {
+
+	var articles = topHeadlinesCBC()
+
+	HTMLerr := t.ExecuteTemplate(w, "index.html", articles)
+
+	if HTMLerr != nil {
+		log.Printf("template parsing err:", HTMLerr)
+	}
+}
+
 func main() {
 
 	server := mux.NewRouter()
@@ -58,6 +70,7 @@ func main() {
 	server.HandleFunc("/CNN", CNN)
 	server.HandleFunc("/BBCNews", BBCNews)
 	server.HandleFunc("/BusinessInsider", BusinessInsider)
+	server.HandleFunc("/CBC", CBC)
 
 	server.PathPrefix("/styles/").Handler(http.StripPrefix("/styles/", http.FileServer(http.Dir("templates/styles/"))))
 	server.PathPrefix("/newsIcons/").Handler(http.StripPrefix("/newsIcons/", http.FileServer(http.Dir("templates/newsIcons/"))))

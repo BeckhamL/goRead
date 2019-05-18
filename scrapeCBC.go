@@ -10,51 +10,49 @@ import (
 	"github.com/gocolly/colly"
 )
 
-var cABusinessInsider = new(currentArticle)
+var cACBC = new(currentArticle)
 
-// NEED TO FIX SCRAPER, SHOULDNT BE PULLING THE SUMMARIZED POINTS
-func getMostFrequentWordsBusinessInsider(url string) [5]string {
+// Function that visits website and summarizes the text
+func getMostFrequentWordsCBC(url string) [5]string {
 
 	c := colly.NewCollector()
 
 	var titleWords []string
 	var paragraphWords [5]string
 
-	c.OnHTML(".collapse-container", func(e *colly.HTMLElement) {
+	c.OnHTML(".detailBodyContent", func(e *colly.HTMLElement) {
 
-		paragraph := e.ChildText(".summary-list")
-		title := e.ChildText(".post-headline ")
+		paragraph := e.ChildText(".story")
+		title := e.ChildText(".detailHeadline")
 
 		if title != "" {
 
 			counter := len(strings.Fields(title))
 			titleWords = make([]string, counter)
 			for i, words := range strings.Fields(title) {
-				titleWords[i] = parseStringBusinessInsider(words)
+				titleWords[i] = parseStringCBC(words)
 			}
 		}
 
 		if paragraph != "" {
-
-			parsedString := parseStringBBCNews(paragraph)
+			parsedString := parseStringCBC(paragraph)
 			m := make(map[string]int)
 			var elements []keyValue
-			m = WordCountBusinessInsider(parsedString)
-			elements = sortWordsBusinessInsider(m)
+			m = WordCountCBC(parsedString)
+			elements = sortWordsCBC(m)
 
 			for i := 0; i < 5; i++ {
 				paragraphWords[i] = elements[i].Key
 			}
 
-			cABusinessInsider.frequentWords = paragraphWords
-			cABusinessInsider.parsedString = parsedString
+			cACBC.frequentWords = paragraphWords
+			cACBC.parsedString = parsedString
 			words := len(strings.Fields(paragraph))
-			cABusinessInsider.totalWords = float64(words)
-			cABusinessInsider.titleWords = titleWords
+			cACBC.totalWords = float64(words)
+			cACBC.titleWords = titleWords
 
-			getSummaryBusinessInsider()
+			getSummaryCBC()
 		}
-
 	})
 
 	c.Visit(url)
@@ -63,7 +61,7 @@ func getMostFrequentWordsBusinessInsider(url string) [5]string {
 }
 
 // Function to remove all unecessary punctuation and character
-func parseStringBusinessInsider(text string) string {
+func parseStringCBC(text string) string {
 
 	reg, err := regexp.Compile("[^a-zA-Z0-9'.]+")
 	if err != nil {
@@ -76,7 +74,7 @@ func parseStringBusinessInsider(text string) string {
 }
 
 // Function to find words
-func WordCountBusinessInsider(s string) map[string]int {
+func WordCountCBC(s string) map[string]int {
 
 	words := strings.Fields(s)
 	m := make(map[string]int)
@@ -88,7 +86,7 @@ func WordCountBusinessInsider(s string) map[string]int {
 }
 
 // Takes a map and returns a slice of keyValue sorted by highest frequency
-func sortWordsBusinessInsider(myMap map[string]int) []keyValue {
+func sortWordsCBC(myMap map[string]int) []keyValue {
 
 	fillerWords := []string{"the", "to", "of", "a", "in", "and", "were", "they", "that", "have",
 		"for", "been", "said", "but", "by", "is", "at", "how", "why", "many", "in", "on", "go", "of", "he", "was", "this", "or",
@@ -108,7 +106,7 @@ func sortWordsBusinessInsider(myMap map[string]int) []keyValue {
 	})
 
 	for i := 0; i < len(ss); i++ {
-		if stringInSliceBusinessInsider(ss[i].Key, fillerWords) {
+		if stringInSliceCBC(ss[i].Key, fillerWords) {
 			ss = append(ss[:i], ss[i+1:]...)
 			i--
 		}
@@ -118,7 +116,7 @@ func sortWordsBusinessInsider(myMap map[string]int) []keyValue {
 }
 
 // Checks if string is contained in array
-func stringInSliceBusinessInsider(a string, list []string) bool {
+func stringInSliceCBC(a string, list []string) bool {
 	for _, b := range list {
 		if b == a {
 			return true
@@ -128,7 +126,7 @@ func stringInSliceBusinessInsider(a string, list []string) bool {
 }
 
 // Checks if there is at least one similar string in both arrays
-func intersectFrequentBusinessInsider(arr1 []string, arr2 [5]string) bool {
+func intersectFrequentCBC(arr1 []string, arr2 [5]string) bool {
 
 	for i := 0; i < len(arr1); i++ {
 		for j := 0; j < len(arr2); j++ {
@@ -140,7 +138,7 @@ func intersectFrequentBusinessInsider(arr1 []string, arr2 [5]string) bool {
 	return false
 }
 
-func intersectTitleBusinessInsider(arr1 []string, arr2 []string) bool {
+func intersectTitleCBC(arr1 []string, arr2 []string) bool {
 
 	for i := 0; i < len(arr1); i++ {
 		for j := 0; j < len(arr2); j++ {
@@ -152,7 +150,7 @@ func intersectTitleBusinessInsider(arr1 []string, arr2 []string) bool {
 	return false
 }
 
-func countWordPriorityBusinessInsider(arr1 []string, arr2 []string) int {
+func countWordPriorityCBC(arr1 []string, arr2 []string) int {
 
 	counter := 0
 
@@ -167,7 +165,7 @@ func countWordPriorityBusinessInsider(arr1 []string, arr2 []string) int {
 	return counter
 }
 
-func sortSentencesBusinessInsider(myMap map[string]int) []keyValue {
+func sortSentencesCBC(myMap map[string]int) []keyValue {
 
 	var kv []keyValue
 
@@ -184,7 +182,7 @@ func sortSentencesBusinessInsider(myMap map[string]int) []keyValue {
 }
 
 // Extract summary from text
-func getSummaryBusinessInsider() string {
+func getSummaryCBC() string {
 
 	var response string
 	var sentences []string
@@ -192,24 +190,24 @@ func getSummaryBusinessInsider() string {
 
 	sentenceWeight := make(map[string]int)
 
-	sentences = strings.Split(cABusinessInsider.parsedString, ".")
+	sentences = strings.Split(cACBC.parsedString, ".")
 
 	for i := 0; i < len(sentences); i++ {
 		words = strings.Split(sentences[i], " ")
-		sentenceWeight[sentences[i]] = countWordPriorityBusinessInsider(words, cABusinessInsider.titleWords)
+		sentenceWeight[sentences[i]] = countWordPriorityCBC(words, cACBC.titleWords)
 	}
 
-	summarizedSentences := sortSentencesBusinessInsider(sentenceWeight)
+	summarizedSentences := sortSentencesCBC(sentenceWeight)
 	response = summarizedSentences[0].Key
 
 	if len(summarizedSentences) < 5 {
-		cABusinessInsider.summaryLength = 0
+		cACBC.summaryLength = 0
 		return response
 	} else {
 		for i := 1; i < 5; i++ {
 			response = response + ". " + summarizedSentences[i].Key
 		}
-		cABusinessInsider.summaryLength = float64(len(response))
+		cACBC.summaryLength = float64(len(response))
 	}
 
 	response = response + "."
@@ -218,7 +216,7 @@ func getSummaryBusinessInsider() string {
 }
 
 // Get the reduction percentage
-func getReductionPercentageBusinessInsider() float64 {
+func getReductionPercentageCBC() float64 {
 
-	return math.Round((cABusinessInsider.totalWords / cABusinessInsider.summaryLength) * 100)
+	return math.Round((cACBC.totalWords / cACBC.summaryLength) * 100)
 }

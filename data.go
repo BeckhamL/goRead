@@ -139,3 +139,42 @@ func topHeadlinesBusinessInsider() []Article {
 
 	return articles
 }
+
+func topHeadlinesCBC() []Article {
+
+	c := newsapi.NewClient("42b47add38084c6c99964fe24dcf6740", newsapi.WithHTTPClient(http.DefaultClient))
+	sources, err := c.GetTopHeadlines(context.Background(), &newsapi.TopHeadlineParameters{
+		Sources: []string{"cbc-news"},
+	})
+
+	if err != nil {
+		panic(err)
+	}
+
+	var articles = []Article{}
+
+	for _, s := range sources.Articles {
+
+		t := s.PublishedAt
+		t.Format("Monday Jan 2, 3:04pm")
+		timeString := t.String()
+		timeString = timeString[0 : len(timeString)-18]
+
+		a := Article{
+			Title:     s.Title,
+			Author:    s.Author,
+			Keywords:  getMostFrequentWordsCBC(s.URL),
+			URL:       s.URL,
+			URLImage:  s.URLToImage,
+			Website:   s.Source.Name,
+			Date:      timeString,
+			Summary:   getSummaryCBC(),
+			Reduction: getReductionPercentageCBC(),
+		}
+
+		articles = append(articles, a)
+
+	}
+
+	return articles
+}
