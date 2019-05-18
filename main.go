@@ -39,6 +39,7 @@ func BBCNews(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// Business Insider route
 func BusinessInsider(w http.ResponseWriter, r *http.Request) {
 
 	var articles = topHeadlinesBusinessInsider()
