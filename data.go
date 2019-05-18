@@ -129,8 +129,8 @@ func topHeadlinesBusinessInsider() []Article {
 			URLImage:  s.URLToImage,
 			Website:   s.Source.Name,
 			Date:      timeString,
-			Summary:   getSummaryBBCNews(),
-			Reduction: getReductionPercentageBBCNews(),
+			Summary:   getSummaryBusinessInsider(),
+			Reduction: getReductionPercentageBusinessInsider(),
 		}
 
 		articles = append(articles, a)
