@@ -63,6 +63,18 @@ func CBC(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// Huffington Post route
+func HuffP(w http.ResponseWriter, r *http.Request) {
+
+	var articles = topHeadlinesHuffP()
+
+	HTMLerr := t.ExecuteTemplate(w, "index.html", articles)
+
+	if HTMLerr != nil {
+		log.Printf("template parsing err:", HTMLerr)
+	}
+}
+
 func main() {
 
 	server := mux.NewRouter()
@@ -71,6 +83,7 @@ func main() {
 	server.HandleFunc("/BBCNews", BBCNews)
 	server.HandleFunc("/BusinessInsider", BusinessInsider)
 	server.HandleFunc("/CBC", CBC)
+	server.HandleFunc("/HuffingtonPost", HuffP)
 
 	server.PathPrefix("/styles/").Handler(http.StripPrefix("/styles/", http.FileServer(http.Dir("templates/styles/"))))
 	server.PathPrefix("/newsIcons/").Handler(http.StripPrefix("/newsIcons/", http.FileServer(http.Dir("templates/newsIcons/"))))

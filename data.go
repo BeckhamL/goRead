@@ -178,3 +178,42 @@ func topHeadlinesCBC() []Article {
 
 	return articles
 }
+
+func topHeadlinesHuffP() []Article {
+
+	c := newsapi.NewClient("42b47add38084c6c99964fe24dcf6740", newsapi.WithHTTPClient(http.DefaultClient))
+	sources, err := c.GetTopHeadlines(context.Background(), &newsapi.TopHeadlineParameters{
+		Sources: []string{"the-huffington-post"},
+	})
+
+	if err != nil {
+		panic(err)
+	}
+
+	var articles = []Article{}
+
+	for _, s := range sources.Articles {
+
+		t := s.PublishedAt
+		t.Format("Monday Jan 2, 3:04pm")
+		timeString := t.String()
+		timeString = timeString[0 : len(timeString)-18]
+
+		a := Article{
+			Title:     s.Title,
+			Author:    s.Author,
+			Keywords:  getMostFrequentWordsHuffP(s.URL),
+			URL:       s.URL,
+			URLImage:  s.URLToImage,
+			Website:   s.Source.Name,
+			Date:      timeString,
+			Summary:   getSummaryHuffP(),
+			Reduction: getReductionPercentageHuffP(),
+		}
+
+		articles = append(articles, a)
+
+	}
+
+	return articles
+}

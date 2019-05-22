@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"log"
 	"math"
 	"regexp"
@@ -11,26 +10,10 @@ import (
 	"github.com/gocolly/colly"
 )
 
-var cACBC = new(currentArticle)
-
-func getAuthorCBC(url string) string {
-
-	c := colly.NewCollector()
-
-	var author string
-
-	c.OnHTML(".bylineDetails", func(e *colly.HTMLElement) {
-		author = e.ChildText("authorText a")
-
-	})
-
-	fmt.Println(author)
-
-	return author
-}
+var cAHuffP = new(currentArticle)
 
 // Function that visits website and summarizes the text
-func getMostFrequentWordsCBC(url string) [5]string {
+func getMostFrequentWordsHuffP(url string) [5]string {
 
 	c := colly.NewCollector()
 
@@ -47,28 +30,28 @@ func getMostFrequentWordsCBC(url string) [5]string {
 			counter := len(strings.Fields(title))
 			titleWords = make([]string, counter)
 			for i, words := range strings.Fields(title) {
-				titleWords[i] = parseStringCBC(words)
+				titleWords[i] = parseStringHuffP(words)
 			}
 		}
 
 		if paragraph != "" {
-			parsedString := parseStringCBC(paragraph)
+			parsedString := parseStringHuffP(paragraph)
 			m := make(map[string]int)
 			var elements []keyValue
-			m = WordCountCBC(parsedString)
-			elements = sortWordsCBC(m)
+			m = WordCountHuffP(parsedString)
+			elements = sortWordsHuffP(m)
 
 			for i := 0; i < 5; i++ {
 				paragraphWords[i] = elements[i].Key
 			}
 
-			cACBC.frequentWords = paragraphWords
-			cACBC.parsedString = parsedString
+			cAHuffP.frequentWords = paragraphWords
+			cAHuffP.parsedString = parsedString
 			words := len(strings.Fields(paragraph))
-			cACBC.totalWords = float64(words)
-			cACBC.titleWords = titleWords
+			cAHuffP.totalWords = float64(words)
+			cAHuffP.titleWords = titleWords
 
-			getSummaryCBC()
+			getSummaryHuffP()
 		}
 	})
 
@@ -78,7 +61,7 @@ func getMostFrequentWordsCBC(url string) [5]string {
 }
 
 // Function to remove all unecessary punctuation and character
-func parseStringCBC(text string) string {
+func parseStringHuffP(text string) string {
 
 	reg, err := regexp.Compile("[^a-zA-Z0-9'.]+")
 	if err != nil {
@@ -91,7 +74,7 @@ func parseStringCBC(text string) string {
 }
 
 // Function to find words
-func WordCountCBC(s string) map[string]int {
+func WordCountHuffP(s string) map[string]int {
 
 	words := strings.Fields(s)
 	m := make(map[string]int)
@@ -103,7 +86,7 @@ func WordCountCBC(s string) map[string]int {
 }
 
 // Takes a map and returns a slice of keyValue sorted by highest frequency
-func sortWordsCBC(myMap map[string]int) []keyValue {
+func sortWordsHuffP(myMap map[string]int) []keyValue {
 
 	fillerWords := []string{"the", "to", "of", "a", "in", "and", "were", "they", "that", "have",
 		"for", "been", "said", "but", "by", "is", "at", "how", "why", "many", "in", "on", "go", "of", "he", "was", "this", "or",
@@ -123,7 +106,7 @@ func sortWordsCBC(myMap map[string]int) []keyValue {
 	})
 
 	for i := 0; i < len(ss); i++ {
-		if stringInSliceCBC(ss[i].Key, fillerWords) {
+		if stringInSliceHuffP(ss[i].Key, fillerWords) {
 			ss = append(ss[:i], ss[i+1:]...)
 			i--
 		}
@@ -133,7 +116,7 @@ func sortWordsCBC(myMap map[string]int) []keyValue {
 }
 
 // Checks if string is contained in array
-func stringInSliceCBC(a string, list []string) bool {
+func stringInSliceHuffP(a string, list []string) bool {
 	for _, b := range list {
 		if b == a {
 			return true
@@ -143,7 +126,7 @@ func stringInSliceCBC(a string, list []string) bool {
 }
 
 // Checks if there is at least one similar string in both arrays
-func intersectFrequentCBC(arr1 []string, arr2 [5]string) bool {
+func intersectFrequentHuffP(arr1 []string, arr2 [5]string) bool {
 
 	for i := 0; i < len(arr1); i++ {
 		for j := 0; j < len(arr2); j++ {
@@ -155,7 +138,7 @@ func intersectFrequentCBC(arr1 []string, arr2 [5]string) bool {
 	return false
 }
 
-func intersectTitleCBC(arr1 []string, arr2 []string) bool {
+func intersectTitleHuffP(arr1 []string, arr2 []string) bool {
 
 	for i := 0; i < len(arr1); i++ {
 		for j := 0; j < len(arr2); j++ {
@@ -167,7 +150,7 @@ func intersectTitleCBC(arr1 []string, arr2 []string) bool {
 	return false
 }
 
-func countWordPriorityCBC(arr1 []string, arr2 []string) int {
+func countWordPriorityHuffP(arr1 []string, arr2 []string) int {
 
 	counter := 0
 
@@ -182,7 +165,7 @@ func countWordPriorityCBC(arr1 []string, arr2 []string) int {
 	return counter
 }
 
-func sortSentencesCBC(myMap map[string]int) []keyValue {
+func sortSentencesHuffP(myMap map[string]int) []keyValue {
 
 	var kv []keyValue
 
@@ -199,7 +182,7 @@ func sortSentencesCBC(myMap map[string]int) []keyValue {
 }
 
 // Extract summary from text
-func getSummaryCBC() string {
+func getSummaryHuffP() string {
 
 	var response string
 	var sentences []string
@@ -207,24 +190,24 @@ func getSummaryCBC() string {
 
 	sentenceWeight := make(map[string]int)
 
-	sentences = strings.Split(cACBC.parsedString, ".")
+	sentences = strings.Split(cAHuffP.parsedString, ".")
 
 	for i := 0; i < len(sentences); i++ {
 		words = strings.Split(sentences[i], " ")
-		sentenceWeight[sentences[i]] = countWordPriorityCBC(words, cACBC.titleWords)
+		sentenceWeight[sentences[i]] = countWordPriorityHuffP(words, cAHuffP.titleWords)
 	}
 
-	summarizedSentences := sortSentencesCBC(sentenceWeight)
+	summarizedSentences := sortSentencesHuffP(sentenceWeight)
 	response = summarizedSentences[0].Key
 
 	if len(summarizedSentences) < 5 {
-		cACBC.summaryLength = 0
+		cAHuffP.summaryLength = 0
 		return response
 	} else {
 		for i := 1; i < 5; i++ {
 			response = response + ". " + summarizedSentences[i].Key
 		}
-		cACBC.summaryLength = float64(len(response))
+		cAHuffP.summaryLength = float64(len(response))
 	}
 
 	response = response + "."
@@ -233,7 +216,7 @@ func getSummaryCBC() string {
 }
 
 // Get the reduction percentage
-func getReductionPercentageCBC() float64 {
+func getReductionPercentageHuffP() float64 {
 
-	return math.Round((cACBC.totalWords / cACBC.summaryLength) * 100)
+	return math.Round((cAHuffP.totalWords / cAHuffP.summaryLength) * 100)
 }
