@@ -20,9 +20,9 @@ func getMostFrequentWordsHuffP(url string) [5]string {
 	var titleWords []string
 	var paragraphWords [5]string
 
-	c.OnHTML(".post-contents yr-entry-text entry-embed", func(e *colly.HTMLElement) {
+	c.OnHTML(".entry__body", func(e *colly.HTMLElement) {
 
-		paragraph := e.ChildText(".content-list-component text")
+		paragraph := e.ChildText(".post-contents")
 		title := e.ChildText(".detailHeadline")
 
 		if title != "" {
